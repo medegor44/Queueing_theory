@@ -41,8 +41,9 @@ def main():
     print("Поступила в СМО     | Поступила на прибор | Вышла из СМО        | Время в очереди     | Время на приборе    | Время в системе    ")
     print("---------------------------------------------------------------------------------------------------------------------------------")
     for i in range(n):
-        queued_time = max(current_time - incoming[i], 0)
-        done_time = max(current_time + service_time[i], incoming[i] + service_time[i])
+        current_time = max(current_time, incoming[i])
+        queued_time = current_time - incoming[i]
+        done_time = current_time + service_time[i]
         on_system_time = done_time - incoming[i]
 
         print(f"{incoming[i]:=19.5f} | {current_time:=19.5f} | {done_time:=19.5f} | {queued_time:=19.5f} | {service_time[i]:=19.5f} | {on_system_time:=19.5f}")
@@ -54,7 +55,7 @@ def main():
         gamma_system += done_time
 
     print(f"Средняя длина очереди: {gamma_queue / queue_time}")
-    print(f"Средняя длина очереди (стационарное значение): {1/6}")
+    print(f"Средняя длина очереди (стационарное значение): {(L/M)**2 / (1 - L/M)}")
 
     T_t = gamma_system / n
     lambda_t = n / current_time
